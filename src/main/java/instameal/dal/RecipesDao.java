@@ -264,4 +264,40 @@ public class RecipesDao {
             }
         }
     }
+    
+    public Recipes updateRecipe(Recipes recipe, String newName, String newDescription, String newCuisineName, BigDecimal newCalories) throws SQLException {
+        String updateRecipe = "UPDATE Recipes SET RecipeName=?, RecipeDescription=?, CuisineName=?, Calories=? WHERE RecipeId=?";
+        Connection connection = null;
+        PreparedStatement updateStmt = null;
+        
+        try {
+            connection = connectionManager.getConnection();
+            updateStmt = connection.prepareStatement(updateRecipe);
+            
+            // Set the values for the update query
+            updateStmt.setString(1, newName);
+            updateStmt.setString(2, newDescription);
+            updateStmt.setString(3, newCuisineName);
+            updateStmt.setBigDecimal(4, newCalories);
+            updateStmt.setInt(5, recipe.getRecipeId());
+            
+            // Execute the update
+            updateStmt.executeUpdate();
+            
+            // Update the recipe object with new values
+            recipe.setRecipeName(newName);
+            recipe.setRecipeDescription(newDescription);
+            recipe.setCuisineName(newCuisineName);
+            recipe.setCalories(newCalories);
+            
+            return recipe;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if (connection != null) connection.close();
+            if (updateStmt != null) updateStmt.close();
+        }
+    }
+    
 }
