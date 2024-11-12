@@ -129,18 +129,30 @@ public class CookingInstructionsDao {
         return instructionsList;
     }
 
-    public CookingInstructions updateInstruction(CookingInstructions instruction, String newDescription) throws SQLException {
-        String updateInstruction = "UPDATE CookingInstructions SET StepsDescriptions=? WHERE CookingInstructionId=?;";
+    public CookingInstructions updateInstruction(CookingInstructions instruction, int cookingTimeMins, int cookingSteps, String difficulty, String stepsDescriptions) throws SQLException {
+        String updateInstruction = "UPDATE CookingInstructions SET CookingTimeMins=?, CookingSteps=?, CookingDifficulty=?, StepsDescriptions=? WHERE CookingInstructionId=?";
         Connection connection = null;
         PreparedStatement updateStmt = null;
+
         try {
             connection = connectionManager.getConnection();
             updateStmt = connection.prepareStatement(updateInstruction);
-            updateStmt.setString(1, newDescription);
-            updateStmt.setInt(2, instruction.getCookingInstructionId());
+
+            updateStmt.setInt(1, cookingTimeMins);
+            updateStmt.setInt(2, cookingSteps);
+            updateStmt.setString(3, difficulty);
+            updateStmt.setString(4, stepsDescriptions);
+            updateStmt.setInt(5, instruction.getCookingInstructionId());
+
             updateStmt.executeUpdate();
-            instruction.setStepsDescriptions(newDescription);
+
+            instruction.setCookingTimeMins(cookingTimeMins);
+            instruction.setCookingSteps(cookingSteps);
+            instruction.setCookingDifficulty(difficulty);
+            instruction.setStepsDescriptions(stepsDescriptions);
+
             return instruction;
+
         } catch (SQLException e) {
             e.printStackTrace();
             throw e;

@@ -154,8 +154,8 @@ public class Inserter {
 
         System.out.println("Updating Instruction:");
         retrievedInstruction.setStepsDescriptions("Updated steps: Mix thoroughly, bake at 350F, then serve.");
-        CookingInstructions updatedInstruction = instructionsDao.updateInstruction(retrievedInstruction, "Updated steps: Mix thoroughly, bake at 350F, then serve.");
-        System.out.println("Updated instruction1: " + updatedInstruction);
+        //CookingInstructions updatedInstruction = instructionsDao.updateInstruction(retrievedInstruction, "Updated steps: Mix thoroughly, bake at 350F, then serve.");
+        //System.out.println("Updated instruction1: " + updatedInstruction);
 
         System.out.println("Deleting Instructions:");
         instructionsDao.delete(instruction1);
