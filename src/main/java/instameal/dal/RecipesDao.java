@@ -299,5 +299,81 @@ public class RecipesDao {
             if (updateStmt != null) updateStmt.close();
         }
     }
-    
+
+
+    public List<Recipes> findRecipesByIngredients(List<String> ingredients) throws SQLException {
+        StringBuilder queryBuilder = new StringBuilder();
+        queryBuilder.append("SELECT r.RecipeId, r.RecipeName, r.RecipeDescription, r.CookingInstructionId, r.Created, ")
+            .append("r.CuisineName, r.Calories, r.TotalFatPDV, r.SugarPDV, r.SodiumPDV, r.ProteinPDV, ")
+            .append("r.SaturatedFatPDV, r.CarbohydratesPDV ")
+            .append("FROM Recipes r ")
+            .append("INNER JOIN RecipeIngredients ri ON r.RecipeId = ri.RecipeId ")
+            .append("WHERE ri.IngredientName IN (");
+
+        // Dynamically build the placeholders for the ingredients list
+        for (int i = 0; i < ingredients.size(); i++) {
+            queryBuilder.append("?");
+            if (i < ingredients.size() - 1) {
+                queryBuilder.append(", ");
+            }
+        }
+        queryBuilder.append(") ")
+            .append("GROUP BY r.RecipeId ")
+            .append("HAVING COUNT(DISTINCT ri.IngredientName) = ?;");
+
+        Connection connection = null;
+        PreparedStatement selectStmt = null;
+        ResultSet results = null;
+        List<Recipes> recipesList = new ArrayList<>();
+
+        try {
+            connection = connectionManager.getConnection();
+            selectStmt = connection.prepareStatement(queryBuilder.toString());
+
+            // Set each ingredient as a parameter in the prepared statement
+            for (int i = 0; i < ingredients.size(); i++) {
+                selectStmt.setString(i + 1, ingredients.get(i));
+            }
+            // Set the count of ingredients as the last parameter
+            selectStmt.setInt(ingredients.size() + 1, ingredients.size());
+
+            results = selectStmt.executeQuery();
+
+            // Process the results
+            while (results.next()) {
+                int recipeId = results.getInt("RecipeId");
+                String recipeName = results.getString("RecipeName");
+                String recipeDescription = results.getString("RecipeDescription");
+                int cookingInstructionId = results.getInt("CookingInstructionId");
+                Timestamp created = results.getTimestamp("Created");
+                String cuisineName = results.getString("CuisineName");
+                BigDecimal calories = results.getBigDecimal("Calories");
+                BigDecimal totalFatPDV = results.getBigDecimal("TotalFatPDV");
+                BigDecimal sugarPDV = results.getBigDecimal("SugarPDV");
+                BigDecimal sodiumPDV = results.getBigDecimal("SodiumPDV");
+                BigDecimal proteinPDV = results.getBigDecimal("ProteinPDV");
+                BigDecimal saturatedFatPDV = results.getBigDecimal("SaturatedFatPDV");
+                BigDecimal carbohydratesPDV = results.getBigDecimal("CarbohydratesPDV");
+
+                Recipes recipe = new Recipes(recipeId, recipeName, recipeDescription, cookingInstructionId, created,
+                    cuisineName, calories, totalFatPDV, sugarPDV, sodiumPDV, proteinPDV, saturatedFatPDV, carbohydratesPDV);
+                recipesList.add(recipe);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if (connection != null) {
+                connection.close();
+            }
+            if (selectStmt != null) {
+                selectStmt.close();
+            }
+            if (results != null) {
+                results.close();
+            }
+        }
+        return recipesList;
+    }
+
 }
