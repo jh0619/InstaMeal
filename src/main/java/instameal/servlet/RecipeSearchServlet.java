@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +31,7 @@ public class RecipeSearchServlet extends HttpServlet {
             throws ServletException, IOException {
         req.getRequestDispatcher("/FindRecipes.jsp").forward(req, resp);
     }
-
+/**
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) 
             throws ServletException, IOException {
@@ -61,5 +62,40 @@ public class RecipeSearchServlet extends HttpServlet {
         }
 
         req.getRequestDispatcher("/FindRecipes.jsp").forward(req, resp);
+    }**/
+   
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) 
+            throws ServletException, IOException {
+        Map<String, String> messages = new HashMap<>(); 
+        req.setAttribute("messagesbyingredients", messages);
+
+        String ingredients = req.getParameter("ingredients");
+       
+        
+        try {
+            List<Recipes> recipes = new ArrayList<>();
+            if (ingredients != null && !ingredients.trim().isEmpty()) {
+                recipes = recipesDao.findRecipesByIngredients(ingredients);
+                if (recipes.isEmpty()) {
+                    messages.put("success", "No recipes found with these ingredients.");
+                } else {
+                    messages.put("success", "Found " + recipes.size() + " matching recipes.");
+                }
+            } else {
+                messages.put("success", "Please enter at least one ingredient.");
+            }
+            req.setAttribute("recipesByIngredients", recipes);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            messages.put("success", "Error searching recipes: " + e.getMessage());
+        }
+
+        req.getRequestDispatcher("/FindRecipes.jsp").forward(req, resp);
     }
+  
+   
 }
+
+    
+    
