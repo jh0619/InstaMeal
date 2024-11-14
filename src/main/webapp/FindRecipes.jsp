@@ -22,7 +22,23 @@
             <br/><br/><br/>
             <span id="successMessage"><b>${messages.success}</b></span>
         </p>
+	</form>
+	
+    <form action="findrecipebyingredients" method="post">
+        <h1>Find Recipe by Ingredients</h1>
+        <div id="ingredientContainer">
+            <p>
+                <input type="text" name="ingredients" placeholder="Enter ingredient">
+            </p>
+        </div>
+        <p>
+            <button type="button" onclick="addIngredient()">Add Another Ingredient</button>
+            <button type="submit">Search</button>
+            <br/><br/><br/>
+            <span id="ingredientMessage"><b>${messages.ingredient}</b></span>
+        </p>
     </form>
+    
     <h1>Matching Recipes by Name</h1>
     <table border="1">
         <tr>
@@ -50,9 +66,20 @@
             </tr>
         </c:forEach>
     </table>
+    
+    
     <br/>
     <h1>Create New Recipes</h1>
     <div id="recipeCreate"><a href="recipecreate">Create New Recipe</a></div>
     <br/>
+    
+    <script>
+        function addIngredient() {
+            const container = document.getElementById('ingredientContainer');
+            const p = document.createElement('p');
+            p.innerHTML = '<input type="text" name="ingredients" placeholder="Enter ingredient">';
+            container.appendChild(p);
+        }
+    </script>
 </body>
 </html>

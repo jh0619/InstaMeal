@@ -21,5 +21,14 @@
         <servlet-name>RecipeIngredient</servlet-name>
         <url-pattern>/recipeingredients</url-pattern>
   </servlet-mapping>
+  <servlet>
+        <servlet-name>FindRecipesByIngredients</servlet-name>
+        <servlet-class>instameal.servlet.RecipeSearchServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FindRecipesByIngredients</servlet-name>
+        <url-pattern>/findrecipebyingredients</url-pattern>
+    </servlet-mapping>
   -->
 </web-app>
+
