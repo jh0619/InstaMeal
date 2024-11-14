@@ -7,6 +7,7 @@ import instameal.model.Recipes;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class RecipesDao {
@@ -301,7 +302,8 @@ public class RecipesDao {
     }
 
 
-    public List<Recipes> findRecipesByIngredients(List<String> ingredients) throws SQLException {
+    public List<Recipes> findRecipesByIngredients(String ingredientsString) throws SQLException {
+        List<String> ingredients = Arrays.asList(ingredientsString.split("\\s*,\\s*"));
         StringBuilder queryBuilder = new StringBuilder();
         queryBuilder.append("SELECT r.RecipeId, r.RecipeName, r.RecipeDescription, r.CookingInstructionId, r.Created, ")
             .append("r.CuisineName, r.Calories, r.TotalFatPDV, r.SugarPDV, r.SodiumPDV, r.ProteinPDV, ")
