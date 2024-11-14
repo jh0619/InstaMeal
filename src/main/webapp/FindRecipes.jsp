@@ -20,11 +20,10 @@
         <p>
             <button type="submit">Search</button>
             <br/><br/><br/>
-            <span id="successMessage"><b>${messages.success}</b></span>
+            <span id="successMessage"><b>${messagesbyname.success}</b></span>
         </p>
 	</form>
-	
-    <form action="findrecipebyingredients" method="post">
+	<!--     <form action="findrecipebyingredients" method="post">
         <h1>Find Recipe by Ingredients</h1>
         <div id="ingredientContainer">
             <p>
@@ -37,7 +36,8 @@
             <br/><br/><br/>
             <span id="ingredientMessage"><b>${messages.ingredient}</b></span>
         </p>
-    </form>
+    </form> -->
+
     
     <h1>Matching Recipes by Name</h1>
     <table border="1">
@@ -52,7 +52,7 @@
             <th>Delete Recipe</th>
             <th>Update Recipe</th>
         </tr>
-        <c:forEach items="${recipes}" var="recipe">
+        <c:forEach items="${recipesByName}" var="recipe">
             <tr>
                 <td><c:out value="${recipe.recipeName}"/></td>
                 <td><c:out value="${recipe.recipeDescription}"/></td>
@@ -72,6 +72,53 @@
     <h1>Create New Recipes</h1>
     <div id="recipeCreate"><a href="recipecreate">Create New Recipe</a></div>
     <br/>
+    <form action="findrecipebyingredients" method="post">
+        <h1>Find Recipe by Ingredients</h1>
+        <div id="ingredientContainer">
+            <p>
+                <input type="text" name="ingredients" placeholder="Enter ingredient">
+            </p>
+        </div>
+        <p>
+            <button type="button" onclick="addIngredient()">Add Another Ingredient</button>
+            <button type="submit">Search</button>
+            <br/><br/><br/>
+            <span id="ingredientMessage"><b>${messagesbyingredients.success}</b></span>
+        </p>
+    </form>
+   
+
+    <h1>Matching Recipes by Ingredients</h1>
+    <table border="1">
+    <tr>
+        <th>Recipe Name</th>
+        <th>Description</th>
+        <th>Cuisine</th>
+        <th>Cooking Instruction</th>
+        <th>Calories</th>
+        <th>Recipe Ingredients</th>
+        <th>Reviews</th>
+        <th>Delete Recipe</th>
+        <th>Update Recipe</th>
+    </tr>
+    <c:if test="${not empty recipesByIngredients}">
+        <c:forEach items="${recipesByIngredients}" var="recipe">
+            <tr>
+                <td><c:out value="${recipe.recipeName}"/></td>
+                <td><c:out value="${recipe.recipeDescription}"/></td>
+                <td><c:out value="${recipe.cuisineName}"/></td>
+                <td><a href="cookinginstruction?recipeId=<c:out value='${recipe.recipeId}'/>">View Instruction</a></td>
+                <td><c:out value="${recipe.calories}"/></td>
+                <td><a href="recipeingredients?recipeId=<c:out value='${recipe.recipeId}'/>">View Ingredients</a></td>
+                <td><a href="reviews?recipeId=<c:out value='${recipe.recipeId}'/>">View Reviews</a></td>
+                <td><a href="recipedelete?recipeId=<c:out value='${recipe.recipeId}'/>">Delete</a></td>
+                <td><a href="recipeupdate?recipeId=<c:out value='${recipe.recipeId}'/>">Update</a></td>
+            </tr>
+        </c:forEach>
+    </c:if>
+</table>
+    
+    
     
     <script>
         function addIngredient() {

@@ -4,7 +4,8 @@
   <welcome-file-list>
     <welcome-file>FindRecipes.jsp</welcome-file>
   </welcome-file-list>
-  <!--
+
+ <!--
   <servlet>
         <servlet-name>FindRecipes</servlet-name>
         <servlet-class>instameal.servlet.FindRecipes</servlet-class>
@@ -30,5 +31,6 @@
         <url-pattern>/findrecipebyingredients</url-pattern>
     </servlet-mapping>
   -->
+
 </web-app>
 

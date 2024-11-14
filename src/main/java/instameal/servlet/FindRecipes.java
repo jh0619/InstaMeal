@@ -24,7 +24,7 @@ public class FindRecipes extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         Map<String, String> messages = new HashMap<>();
-        req.setAttribute("messages", messages);
+        req.setAttribute("messagesbyname", messages);
 
         List<Recipes> recipes = new ArrayList<>();
         String recipeName = req.getParameter("recipename");
@@ -36,7 +36,7 @@ public class FindRecipes extends HttpServlet {
                 Recipes recipe = recipesDao.getRecipeByName(recipeName);
                 if (recipe != null) {
                     recipes.add(recipe);
-                    messages.put("success", "Displaying results for " + recipeName);
+                    messages.put("success", "Displaying results for: " + recipeName);
                 } else {
                     messages.put("success", "No recipes found for " + recipeName);
                 }
@@ -45,7 +45,7 @@ public class FindRecipes extends HttpServlet {
                 throw new IOException(e);
             }
         }
-        req.setAttribute("recipes", recipes);
+        req.setAttribute("recipesByName", recipes);
         req.getRequestDispatcher("/FindRecipes.jsp").forward(req, resp);
     }
 
